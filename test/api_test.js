@@ -5,16 +5,21 @@ var async = require('async');
 var api = require('../api');
 var reset = require('../db/reset.js');
 
-var myDevice = {};
-
 var fooUuid = '00000000-0000-0000-0000-000000000000';
 
 var myObj = {
 };
 
+var myRel, otherRel;
+
 exports.objects = {
   'reset': function(test) {
     reset(function() {
+      test.done();
+    });
+  },
+  'purge': function(test) {
+    api.purge(function() {
       test.done();
     });
   },
@@ -39,10 +44,10 @@ exports.objects = {
       });
     },
   'add': function(test){
-    test.expect(3);
+    test.expect(4);
 
     myObj = {
-      type: 'Thing',
+      type: 'thing',
       slug: 'thing',
       attrs: {
         foo: 'bar'
@@ -55,6 +60,7 @@ exports.objects = {
         myObj.id = res.id;
         test.equal(err, null);
         test.equal(res.type, myObj.type);
+        test.equal(res.slug, myObj.slug);
         test.deepEqual(res.attrs, myObj.attrs);
         test.done();
       });
@@ -103,6 +109,119 @@ exports.objects = {
             test.done();
           });
       });
+  },
+
+  'add-parent': function(test){
+
+    myObj = {
+      type: 'parent',
+      slug: 'parent'
+    };
+
+    api.add(
+      myObj,
+      function(err, res){ 
+        myObj.id = res.id;
+        test.done();
+      });
+  },
+  // add two objs
+  'add-child': function(test){
+
+    myRel = {
+      type: 'child',
+      slug: 'child'
+    };
+
+    api.add(
+      myRel,
+      function(err, res){ 
+        myRel.id = res.id;
+        test.done();
+      });
+  },
+  'add-other-child': function(test){
+
+    otherRel = {
+      type: 'child',
+      slug: 'other'
+    };
+
+    api.add(
+      otherRel,
+      function(err, res){ 
+        otherRel.id = res.id;
+        test.done();
+      });
+  },
+  //find objs by type
+  'find-type': function(test){
+    test.expect(1);
+    api.find({
+      type: 'child'
+    }, function(err, res){
+      test.equal(res.length, 2);
+      test.done();
+    });
+  },
+  'count-type': function(test){
+    test.expect(1);
+    api.count({
+      type: 'child'
+    }, function(err, res){
+      test.equal(res, 2);
+      test.done();
+    });
+  },
+  // relate child to parent and find
+  'rel': function(test){
+    api.rel(
+      myObj.id, myRel.id,
+      function(err, res){ 
+        test.done();
+      });
+  },
+  'find-rel': function(test){
+    test.expect(2);
+    api.find({
+      id: myObj.id, 
+      type: 'child'
+    }, function(err, res){ 
+      test.equal(res.length, 1);
+      test.equal(res[0].id, myRel.id);
+      test.done();
+    });
+  },
+  'count-rel': function(test){
+    test.expect(1);
+    api.count({
+      id: myObj.id, 
+      type: 'child'
+    }, function(err, res){ 
+      test.equal(res, 1);
+      test.done();
+    });
+  },
+  // relate other to parent with role and find
+  'other-rel': function(test){
+    api.rel(
+      myObj.id, otherRel.id, {
+        role: 'family'
+      }, function(err, res){ 
+        test.done();
+      });
+  },
+  'find-role': function(test){
+    test.expect(2);
+    api.find({
+      id: myObj.id, 
+      type: 'child',
+      role: ['family','friends']
+    }, function(err, res){ 
+      test.equal(res.length, 1);
+      test.equal(res[0].id, otherRel.id);
+      test.done();
+    });
   }
 
 };
