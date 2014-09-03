@@ -1,5 +1,3 @@
-//require('shelljs/global');
-
 module.exports = function(grunt) {
  
   grunt.registerTask('reset', 'Resets database to pristine state', function() {
@@ -7,5 +5,4 @@ module.exports = function(grunt) {
     var api = require('../api');
     api.reset(done);
   });
-
-}
+};
