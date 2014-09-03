@@ -10,7 +10,6 @@ CREATE TABLE obj (
 
 CREATE TABLE rel (
        id uuid,
-       type varchar(16), 
        rel_id uuid,
        role varchar(8) default null,
        expires timestamp default null,
