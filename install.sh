@@ -1,3 +1,5 @@
+createuser -P os
+
 createdb -O os os_dev
 psql -c psql -d os_dev -c 'CREATE EXTENSION "uuid-ossp";'
 
