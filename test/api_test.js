@@ -3,7 +3,6 @@
 var async = require('async');
 
 var api = require('../api');
-var reset = require('../db/reset.js');
 
 var fooUuid = '00000000-0000-0000-0000-000000000000';
 
@@ -14,12 +13,7 @@ var myRel, otherRel;
 
 exports.objects = {
   'reset': function(test) {
-    reset(function() {
-      test.done();
-    });
-  },
-  'purge': function(test) {
-    api.purge(function() {
+    api.reset(function() {
       test.done();
     });
   },

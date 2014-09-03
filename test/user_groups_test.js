@@ -4,7 +4,6 @@ var async = require('async');
 var _ = require('underscore');
 
 var api = require('../api');
-var reset = require('../db/reset.js');
 
 var myUser, myAdmin, myGroup, myDoc, myIndex;
 
@@ -12,7 +11,7 @@ var myDocs;
 
 exports.access = {
   'reset': function(test) {
-    reset(function() {
+    api.reset(function() {
       test.done();
     });
   },
