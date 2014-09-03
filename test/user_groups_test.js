@@ -10,11 +10,13 @@ var myUser, myAdmin, myGroup, myDoc, myIndex;
 var myDocs;
 
 exports.access = {
+
   'reset': function(test) {
     api.reset(function() {
       test.done();
     });
   },
+
   'add-user': function(test){
     myUser = {
       type: 'user',
@@ -27,6 +29,7 @@ exports.access = {
         test.done();
       });
   },
+
   'get-user-by-slug': function(test){
     api.get({
       type: 'user',
@@ -35,6 +38,7 @@ exports.access = {
       test.done();
     });
   },
+
   'add-admin': function(test){
     myAdmin = {
       type: 'user',
@@ -47,6 +51,7 @@ exports.access = {
         test.done();
       });
   },
+
   'add-group': function(test){
     myGroup = {
       type: 'group'
@@ -58,6 +63,7 @@ exports.access = {
         test.done();
       });
   },
+
   'join-group': function(test){
     api.rel(
       myGroup.id,
@@ -67,6 +73,7 @@ exports.access = {
         test.done();
       });
   },
+
   'find-user-with-role': function(test){
     test.expect(2);
     api.find({
@@ -79,6 +86,7 @@ exports.access = {
       test.done();
     });
   },
+
   'add-index': function(test){
     myIndex = {
       type: 'index'
@@ -90,6 +98,7 @@ exports.access = {
         test.done();
       });
   },
+
   'add-docs': function(test){
 
     var add = function(x, next){
@@ -111,6 +120,7 @@ exports.access = {
 
     async.eachSeries(docs, add, test.done);
   },
+
   'find-docs': function(test){
     test.expect(1);
     api.find({
@@ -122,6 +132,7 @@ exports.access = {
       test.done();
     });
   },
+
   // add two of the docs to the group, providing access control
   'add-group-docs': function(test){
     var docs = _.take(myDocs, 2);
@@ -136,6 +147,7 @@ exports.access = {
     };
     async.eachSeries(docs, add, test.done);
   },
+
   'find-group-docs': function(test){
     test.expect(1);
     api.find({
@@ -146,6 +158,7 @@ exports.access = {
       test.done();
     });
   },
+
   'find-user-docs': function(test){
     test.expect(1);
     api.find({
