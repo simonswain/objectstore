@@ -48,17 +48,20 @@ will be completely overwritten each time, not have their individual
 fields updated. Fetch an object, change some attrs, write the whole
 thing back.
 
-You can create relationships between objects. This is the main reason
-Objectstore exists.
+You can create a relationship (`rel`) between two object, with an
+optional role, expiration and position.
 
-The relationships have an optional role, expiration and position.
+You use relationships, types and roles to associate objects with each
+other..
 
-Some uses of relationships are
+These relationships are the main reason Objectstore exists.
 
-* parent-child, i.e a collection (use position for ordering)
+Some example uses are:
+
+* A collection of objects in a container
 * user/group membership with expiration
-* users have roles in a group
-* user role in group controls access to items in a collection
+* users with roles in a group
+* user role in group controlling access to items in a collection
 
 Use slugs to find named objects without using their id (e.g. looking
 up a user by username, looking up an item in a collection based on a
