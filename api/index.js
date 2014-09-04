@@ -8,6 +8,9 @@ var validate = require('../lib/validate.js');
 
 module.exports = {};
 
+/**
+* initialise the database
+*/
 module.exports.reset = function(next){
 
   var fs = require('fs');
@@ -39,6 +42,9 @@ module.exports.reset = function(next){
 };
 
 
+/**
+* delete all data from the database
+*/
 module.exports.purge = function(next){
 
   var objs = function(done){
@@ -65,6 +71,10 @@ module.exports.purge = function(next){
 
 };
 
+
+/**
+* shared routine to clean up opts used by #find and #count
+*/
 var cleanOpts = function(opts){
 
   if (!opts.hasOwnProperty('type')){
@@ -126,6 +136,10 @@ var cleanOpts = function(opts){
 
 };
 
+
+/**
+* find a set of objects
+*/
 module.exports.find = function(opts, next) {
 
   opts = cleanOpts(opts);
@@ -200,6 +214,10 @@ module.exports.find = function(opts, next) {
 
 };
 
+
+/**
+* count how many objects exists according to criteria
+*/
 module.exports.count = function(opts, next) {
 
   opts = cleanOpts(opts);
@@ -251,6 +269,9 @@ module.exports.count = function(opts, next) {
 };
 
 
+/**
+* get a single object by id
+*/
 module.exports.getById = function(id, next){
 
   if(!validate.uuid(id)){
@@ -271,6 +292,10 @@ module.exports.getById = function(id, next){
 
 };
 
+/**
+* get a single object by it slug and type. If more than one exists
+* with the same slug, one will be returned at random
+*/
 module.exports.getBy = function(opts, next){
 
   var sql;
@@ -317,6 +342,10 @@ module.exports.getBy = function(opts, next){
   );
 };
 
+
+/**
+* get an object by or or type + slug
+*/
 module.exports.get = function(q, next) {
 
   if(validate.uuid(q)){
@@ -331,6 +360,10 @@ module.exports.get = function(q, next) {
 
 };
 
+
+/**
+* create an object. can optionally set rels at the same time
+*/
 module.exports.add = function(obj, rels, next) {
 
   if(typeof rels === 'function'){
@@ -408,6 +441,10 @@ module.exports.add = function(obj, rels, next) {
 
 };
 
+
+/**
+* update the json blob on an existing object
+*/
 module.exports.set = function(id, attrs, next) {
 
   if (!validate.uuid(id)) {
@@ -432,6 +469,10 @@ module.exports.set = function(id, attrs, next) {
 
 };
 
+
+/**
+* delete an object by id
+*/
 module.exports.del = function(id, next) {
 
   if (!validate.uuid(id)) {
@@ -453,7 +494,9 @@ module.exports.del = function(id, next) {
 };
 
 
-
+/**
+ * remove any existing relationship between two objects
+ */
 module.exports.unrel = function(id, rel_id, next) {
 
   if (!validate.uuid(id)) {
@@ -479,6 +522,10 @@ module.exports.unrel = function(id, rel_id, next) {
 
 };
 
+
+/**
+ * create a relationship between two objects
+ */
 module.exports.rel = function(id, rel_id, opts, next) {
 
   // opts is and optional param. all fields in opts are optional and
