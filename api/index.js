@@ -71,6 +71,23 @@ module.exports.purge = function(next){
 
 };
 
+/**
+* get some basic stats
+*/
+module.exports.stats = function(next){
+
+  var sql;
+  sql = "SELECT ";
+  sql += " (SELECT COUNT(*) FROM obj) AS objects, ";
+  sql += " (SELECT COUNT(*) FROM rel) AS relations ";
+
+  db.queryOne(
+    sql,
+    next
+  );
+
+};
+
 
 /**
 * shared routine to clean up opts used by #find and #count
