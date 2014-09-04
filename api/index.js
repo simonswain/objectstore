@@ -16,14 +16,14 @@ module.exports.reset = function(next){
   var fs = require('fs');
 
   var schema = fs.readFileSync (
-    __dirname + '/../db/schema.sql', 
+    __dirname + '/../db/schema.sql',
     'ascii'
   );
-  
+
   schema = schema.trim();
   schema = schema.split(';');
   schema = _.reduce(
-    schema, 
+    schema,
     function(memo, sql){
       sql = sql.trim();
       if(sql !== ''){
@@ -35,7 +35,7 @@ module.exports.reset = function(next){
   async.eachSeries(
     schema,
     db.query,
-    function(err){ 
+    function(err){
       next();
     });
 
@@ -87,6 +87,10 @@ var cleanOpts = function(opts){
 
   if (!opts.hasOwnProperty('rel_id')){
     opts.rel_id = false;
+  }
+
+  if (!opts.hasOwnProperty('role_id')){
+    opts.role_id = false;
   }
 
   if (!opts.hasOwnProperty('role')){
@@ -152,6 +156,7 @@ module.exports.find = function(opts, next) {
   var args = [];
   var conds = [];
   var ix = 1;
+  var cx;
 
   // related objs query
   if(opts.id){
@@ -164,22 +169,60 @@ module.exports.find = function(opts, next) {
     sql += " FROM obj o ";
   }
 
-  // add options
+  // options
 
-  if(opts.id){
-    conds.push(" r.id = $" + ix);
-    args.push(opts.id);
-    ix ++;
-  }
-
+  // if type set, objects of this type will be found
   if(opts.type){
     conds.push(" o.type = $" + ix);
     args.push(opts.type);
     ix ++;
   }
 
-  if(opts.id && opts.role){
-    var cx = [];
+  // if id set, objs will be found that are related to obj id
+  if(opts.id){
+    conds.push(" r.id = $" + ix);
+    args.push(opts.id);
+    ix ++;
+  }
+
+  // if role_id set, role_id obj must have relationship with id, and
+  // specified role. role will not be used when filtering the
+  // individual rel_id objects
+
+  if(opts.role_id){
+    var role_sql = "";
+    role_sql += "(SELECT COUNT(*) FROM rel";
+    role_sql += " WHERE id=$" + ix;
+    args.push(opts.id);
+    ix ++;
+
+    role_sql += " AND rel_id=$" + ix;
+    args.push(opts.role_id);
+    ix ++;
+
+    role_sql += " AND rel_id=$" + ix;
+    args.push(opts.role_id);
+    ix ++;
+
+    // if role or [role, role, ...]
+    if(opts.role){
+      cx = [];
+      _.each(opts.role, function(x){
+        cx.push(ix);
+        ix ++;
+        args.push(x);
+      });
+      role_sql += " AND role IN($" + cx.join(', $') + ")";
+    }
+
+    role_sql += ") = 1";
+    conds.push(role_sql);
+  }
+
+  // if role or [role, role] then rel must have these roles. don't use
+  // if role_is is being used to check role
+  if(!opts.role_id && opts.id && opts.role){
+    cx = [];
     _.each(opts.role, function(x){
       cx.push(ix);
       ix ++;
@@ -187,6 +230,7 @@ module.exports.find = function(opts, next) {
     });
     conds.push(" r.role IN($" + cx.join(', $') + ")");
   }
+
 
   // create query
 
@@ -230,6 +274,7 @@ module.exports.count = function(opts, next) {
   var args = [];
   var conds = [];
   var ix = 1;
+  var cx;
 
   // related objs query
   if(opts.id){
@@ -242,17 +287,69 @@ module.exports.count = function(opts, next) {
     sql += " FROM obj o ";
   }
 
+  // options
+
+  // if type set, objects of this type will be found
+  if(opts.type){
+    conds.push(" o.type = $" + ix);
+    args.push(opts.type);
+    ix ++;
+  }
+
+  // if id set, objs will be found that are related to obj id
   if(opts.id){
     conds.push(" r.id = $" + ix);
     args.push(opts.id);
     ix ++;
   }
 
-  if(opts.type){
-    conds.push(" o.type = $" + ix);
-    args.push(opts.type);
+  // if role_id set, role_id obj must have relationship with id, and
+  // specified role. role will not be used when filtering the
+  // individual rel_id objects
+
+  if(opts.role_id){
+    var role_sql = "";
+    role_sql += "(SELECT COUNT(*) FROM rel";
+    role_sql += " WHERE id=$" + ix;
+    args.push(opts.id);
     ix ++;
+
+    role_sql += " AND rel_id=$" + ix;
+    args.push(opts.role_id);
+    ix ++;
+
+    role_sql += " AND rel_id=$" + ix;
+    args.push(opts.role_id);
+    ix ++;
+
+    // if role or [role, role, ...]
+    if(opts.role){
+      cx = [];
+      _.each(opts.role, function(x){
+        cx.push(ix);
+        ix ++;
+        args.push(x);
+      });
+      role_sql += " AND role IN($" + cx.join(', $') + ")";
+    }
+
+    role_sql += ") = 1";
+    conds.push(role_sql);
   }
+
+  // if role or [role, role] then rel must have these roles. don't use
+  // if role_is is being used to check role
+  if(!opts.role_id && opts.id && opts.role){
+    cx = [];
+    _.each(opts.role, function(x){
+      cx.push(ix);
+      ix ++;
+      args.push(x);
+    });
+    conds.push(" r.role IN($" + cx.join(', $') + ")");
+  }
+
+  // create query
 
   if(conds.length>0){
     sql += " WHERE";

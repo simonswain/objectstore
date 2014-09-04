@@ -148,6 +148,8 @@ exports.access = {
     async.eachSeries(docs, add, test.done);
   },
 
+
+  // find docs that belong to the group
   'find-group-docs': function(test){
     test.expect(1);
     api.find({
@@ -159,15 +161,110 @@ exports.access = {
     });
   },
 
+
+  // find docs a user in the group can access depending on their
+  // relationship with group
   'find-user-docs': function(test){
     test.expect(1);
     api.find({
       id: myGroup.id, 
-      type: 'doc'
-    }, function(err, res){ 
+      role_id: myUser.id, 
+      type: 'doc',
+    }, function(err, res){
       test.equal(res.length, 2);
       test.done();
     });
+  },
+  'count-user-docs': function(test){
+    test.expect(1);
+    api.count({
+      id: myGroup.id, 
+      role_id: myUser.id, 
+      type: 'doc',
+    }, function(err, res){
+      test.equal(res, 2);
+      test.done();
+    });
+  },
+
+  'find-user-docs-role': function(test){
+    test.expect(1);
+    api.find({
+      id: myGroup.id, 
+      role_id: myUser.id,
+      role: 'view',
+      type: 'doc',
+    }, function(err, res){
+      test.equal(res.length, 2);
+      test.done();
+    });
+  },
+  'count-user-docs-role': function(test){
+    test.expect(1);
+    api.count({
+      id: myGroup.id, 
+      role_id: myUser.id,
+      role: 'view',
+      type: 'doc',
+    }, function(err, res){
+      test.equal(res, 2);
+      test.done();
+    });
+  },
+
+  'find-user-docs-not-role': function(test){
+    test.expect(1);
+    api.find({
+      id: myGroup.id, 
+      role_id: myUser.id, 
+      role: 'edit',
+      type: 'doc',
+    }, function(err, res){
+      test.equal(res.length, 0);
+      test.done();
+    });
+  },
+  'count-user-docs-not-role': function(test){
+    test.expect(1);
+    api.count({
+      id: myGroup.id, 
+      role_id: myUser.id, 
+      role: 'edit',
+      type: 'doc',
+    }, function(err, res){
+      test.equal(res, 0);
+      test.done();
+    });
+  },
+
+
+  'find-user-docs-multiple-roles': function(test){
+    test.expect(1);
+    api.find({
+      id: myGroup.id, 
+      role_id: myUser.id, 
+      role: ['view','edit'],
+      type: 'doc',
+    }, function(err, res){
+      test.equal(res.length, 2);
+      test.done();
+    });
+  },
+  'count-user-docs-multiple-roles': function(test){
+    test.expect(1);
+    api.count({
+      id: myGroup.id, 
+      role_id: myUser.id, 
+      role: ['view','edit'],
+      type: 'doc',
+    }, function(err, res){
+      test.equal(res, 2);
+      test.done();
+    });
   }
+
+  // does user in group have access to a specific doc
+
+  // can-access?
 
 };
