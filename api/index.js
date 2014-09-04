@@ -400,6 +400,10 @@ module.exports.getBy = function(opts, next){
   var conds = [];
   var ix = 1;
 
+  if(!opts.hasOwnProperty('id') || ! validate.uuid(opts.id)){
+    opts.id = false;
+  }
+
   if(!opts.hasOwnProperty('type')){
     opts.type = false;
   }
@@ -408,9 +412,21 @@ module.exports.getBy = function(opts, next){
     opts.slug = false;
   }
 
+  if(opts.id){
+    sql = "SELECT o.*";
+    sql += " FROM rel r ";
+    sql += " INNER JOIN obj o ";
+    sql += " ON o.id = r.rel_id ";
+  } else {
+    sql = "SELECT *";
+    sql += " FROM obj o ";
+  }
 
-  sql = "SELECT * ";
-  sql += " FROM obj o";
+  if(opts.id){
+    conds.push(" r.id = $" + ix);
+    args.push(opts.id);
+    ix ++;
+  }
 
   if(opts.type){
     conds.push(" o.type = $" + ix);
@@ -441,7 +457,7 @@ module.exports.getBy = function(opts, next){
 
 
 /**
-* get an object by or or type + slug
+* get an object by id or type + slug
 */
 module.exports.get = function(q, next) {
 
@@ -573,7 +589,7 @@ module.exports.set = function(id, attrs, next) {
 
   // overloaded for setting arbitrary field on obj table. currently
   // only slug can be set.
-  if (arguments[1] === 'slug') {   
+  if (arguments[1] === 'slug') {
     return module.exports.setSlug(id, arguments[2], arguments[3]);
   }
 

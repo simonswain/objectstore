@@ -30,7 +30,7 @@ exports.objects = {
   'get-not-found': function(test) {
     test.expect(2);
     api.get(
-      fooUuid, 
+      fooUuid,
       function(err, res) {
         test.equal(err, null);
         test.equal(res, false);
@@ -50,7 +50,7 @@ exports.objects = {
 
     api.add(
       myObj,
-      function(err, res){ 
+      function(err, res){
         myObj.id = res.id;
         test.equal(err, null);
         test.equal(res.type, myObj.type);
@@ -62,7 +62,7 @@ exports.objects = {
   'get': function(test) {
     test.expect(3);
     api.get(
-      myObj.id, 
+      myObj.id,
       function(err, res) {
         test.equal(err, null);
         test.equal(res.id, myObj.id);
@@ -72,17 +72,15 @@ exports.objects = {
   },
   'set': function(test) {
     test.expect(2);
-
     var attrs = {
       setting: 321
     };
-
     api.set(
-      myObj.id, 
+      myObj.id,
       attrs,
       function(err) {
         api.get(
-          myObj.id, 
+          myObj.id,
           function(err, res) {
             test.equal(err, null);
             test.deepEqual(res.attrs, attrs);
@@ -93,14 +91,13 @@ exports.objects = {
   'set-slug': function(test) {
     test.expect(2);
     api.set(
-      myObj.id, 
+      myObj.id,
       'slug',
       'new-slug',
       function(err) {
         api.get(
-          myObj.id, 
+          myObj.id,
           function(err, res) {
-            console.log(res);
             test.equal(err, null);
             test.equal(res.slug, 'new-slug');
             test.done();
@@ -110,10 +107,10 @@ exports.objects = {
   'delete': function(test) {
     test.expect(2);
     api.del(
-      myObj.id, 
+      myObj.id,
       function(err) {
         api.get(
-          myObj.id, 
+          myObj.id,
           function(err, res) {
             test.equal(err, null);
             test.equal(res, false);
@@ -121,9 +118,7 @@ exports.objects = {
           });
       });
   },
-
   'add-parent': function(test){
-
     myObj = {
       type: 'parent',
       slug: 'parent'
@@ -131,36 +126,32 @@ exports.objects = {
 
     api.add(
       myObj,
-      function(err, res){ 
+      function(err, res){
         myObj.id = res.id;
         test.done();
       });
   },
   // add two objs
   'add-child': function(test){
-
     myRel = {
       type: 'child',
       slug: 'child'
     };
-
     api.add(
       myRel,
-      function(err, res){ 
+      function(err, res){
         myRel.id = res.id;
         test.done();
       });
   },
   'add-other-child': function(test){
-
     otherRel = {
       type: 'child',
       slug: 'other'
     };
-
     api.add(
       otherRel,
-      function(err, res){ 
+      function(err, res){
         otherRel.id = res.id;
         test.done();
       });
@@ -188,16 +179,16 @@ exports.objects = {
   'rel': function(test){
     api.rel(
       myObj.id, myRel.id,
-      function(err, res){ 
+      function(err, res){
         test.done();
       });
   },
   'find-rel': function(test){
     test.expect(2);
     api.find({
-      id: myObj.id, 
+      id: myObj.id,
       type: 'child'
-    }, function(err, res){ 
+    }, function(err, res){
       test.equal(res.length, 1);
       test.equal(res[0].id, myRel.id);
       test.done();
@@ -206,10 +197,58 @@ exports.objects = {
   'count-rel': function(test){
     test.expect(1);
     api.count({
-      id: myObj.id, 
+      id: myObj.id,
       type: 'child'
-    }, function(err, res){ 
+    }, function(err, res){
       test.equal(res, 1);
+      test.done();
+    });
+  },
+  // find named slug in parent-child rel
+  'get-rel': function(test){
+    test.expect(2);
+    api.get({
+      id: myObj.id,
+      slug: 'child'
+    }, function(err, res){
+      test.equal(res.id, myRel.id);
+      test.equal(res.slug, 'child');
+      test.done();
+    });
+  },
+  // find named slug not in parent-child rel (should get nothing)
+  'get-rel-none': function(test){
+    test.expect(1);
+    api.get({
+      id: myObj.id,
+      slug: 'other'
+    }, function(err, res){
+      test.equal(res, false);
+      test.done();
+    });
+  },
+  // find named slug of type in parent-child rel
+  'get-rel-type': function(test){
+    test.expect(2);
+    api.get({
+      id: myObj.id,
+      slug: 'child',
+      type: 'child'
+    }, function(err, res){
+      test.equal(res.id, myRel.id);
+      test.equal(res.slug, 'child');
+      test.done();
+    });
+  },
+  // should find nothing
+  'get-rel-type-none': function(test){
+    test.expect(1);
+    api.get({
+      id: myObj.id,
+      slug: 'other',
+      type: 'cousin'
+    }, function(err, res){
+      test.equal(res, false);
       test.done();
     });
   },
@@ -218,17 +257,17 @@ exports.objects = {
     api.rel(
       myObj.id, otherRel.id, {
         role: 'family'
-      }, function(err, res){ 
+      }, function(err, res){
         test.done();
       });
   },
   'find-role': function(test){
     test.expect(2);
     api.find({
-      id: myObj.id, 
+      id: myObj.id,
       type: 'child',
       role: ['family','friends']
-    }, function(err, res){ 
+    }, function(err, res){
       test.equal(res.length, 1);
       test.equal(res[0].id, otherRel.id);
       test.done();
