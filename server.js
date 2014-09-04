@@ -1,23 +1,18 @@
 var Hapi = require('hapi');
 var async = require('async');
 
+
+var logger = require('./lib/logger');
 var api = require('./api');
+var db = require('./lib/db');
 
 var server = Hapi.createServer('localhost', 8000);
 
 server.route({
   method: 'GET',
-  path: '/ping',
+  path: '/',
   handler: function (request, reply) {
-    reply({pong: new Date().getTime()});
-  }
-});
-
-server.route({
-  method: 'GET',
-  path: '/status',
-  handler: function (request, reply) {
-    reply({status: 'ok'});
+    reply({'objectstore': '0.0.1'});
   }
 });
 
@@ -25,8 +20,27 @@ server.route({
   method: 'GET',
   path: '/stats',
   handler: function (request, reply) {
-    var stats = {};
-    reply(stats);
+    api.stats(function(err, res){
+      reply(res);
+    });
+  }
+});
+
+server.route({
+  method: 'GET',
+  path: '/objects/{id}',
+  handler: function (request, reply) {
+    reply('Not implemented yet');
+  }
+});
+
+server.route({
+  method: 'GET',
+  path: '/objects',
+  handler: function (request, reply) {
+    api.find({}, function(err, objs){
+      reply(objs);
+    });
   }
 });
 
