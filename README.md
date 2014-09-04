@@ -71,10 +71,13 @@ url fragment)
 
 ### Node Module
 
+```
 npm install objectstore
+```
 
+```
 var os = require('objectstore');
-
+```
 
 ### Simple server
 
@@ -90,6 +93,7 @@ server.start(next);
 ### Standalone Server
 
 Create database
+
 ```bash
 sudo su - postgres
 createuser -P os
@@ -128,16 +132,15 @@ var obj = {
   slug: 'my-slug',
   attrs: {}
 }
-
+```
 There is no enforcement of unique slugs. You should check a slug is
 available before using it. Typically you will use a slug in
 conjunction with a parent-child relationship, to allow you to find an
 object by name instead of id.
 
+```
 add(obj, next)
-
 add(obj, rel, next)
-
 add(obj, rels, next)
 ```
 
@@ -164,7 +167,7 @@ rel(id, rel_id [, opts], next)
 ```
 opts and all it's parameters are optional
 
-```json
+```javascript
 {
   role: 'some-role',
   position: <integer>,
@@ -180,13 +183,17 @@ Get an object by id
 
 ```javascript
 get(id, next)
+```
 
 Get an object by type, slug and parent.
 
 ```javascript
 get(opts, next)
+```
 
-// opts are like
+opts are like
+
+```
 {
   id: '', // id of parent in relationship
   type: '', // type of object to look for
@@ -277,7 +284,7 @@ rel :id :rel_id [:role :position: :expires]
 relate two objects
 
 
-## Some Use cases
+## Some use-cases
 
 Users and groups
 
@@ -285,25 +292,5 @@ Users and groups
 * create a group
 * add user to group
 * give user role in group
-find all users with role
-
-create some items
-grant access to some of the items to the group
-find items user x (having role y) can access
-
-does user x have role y on item z
-
-
-does user have
-
-
-create a collection
-add an item
-get all items
-find item by slug
-
-
-create some items
-find items
-
+* find all users with role
 
