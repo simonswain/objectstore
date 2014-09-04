@@ -540,12 +540,41 @@ module.exports.add = function(obj, rels, next) {
 
 
 /**
+* update an objects's slug (treated as a private method)
+*/
+module.exports.setSlug = function(id, slug, next) {
+
+  if(!validate.uuid(id)) {
+    return next(new Error('invalid id'));
+  }
+
+  var sql;
+  sql = "UPDATE obj SET ";
+  sql += " slug = $2 ";
+  sql += " WHERE id = $1";
+
+  db.query(
+    sql,
+    [id, slug],
+    function(err){
+      module.exports.get(id, next);
+    });
+
+};
+
+/**
 * update the json blob on an existing object
 */
 module.exports.set = function(id, attrs, next) {
 
   if (!validate.uuid(id)) {
-    return next(new Error('INVALID id'));
+    return next(new Error('invalid id'));
+  }
+
+  // overloaded for setting arbitrary field on obj table. currently
+  // only slug can be set.
+  if (arguments[1] === 'slug') {   
+    return module.exports.setSlug(id, arguments[2], arguments[3]);
   }
 
   if (typeof attrs !== 'object') {

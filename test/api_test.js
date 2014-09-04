@@ -90,6 +90,23 @@ exports.objects = {
           });
       });
   },
+  'set-slug': function(test) {
+    test.expect(2);
+    api.set(
+      myObj.id, 
+      'slug',
+      'new-slug',
+      function(err) {
+        api.get(
+          myObj.id, 
+          function(err, res) {
+            console.log(res);
+            test.equal(err, null);
+            test.equal(res.slug, 'new-slug');
+            test.done();
+          });
+      });
+  },
   'delete': function(test) {
     test.expect(2);
     api.del(
