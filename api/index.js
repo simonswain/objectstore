@@ -140,6 +140,77 @@ var cleanOpts = function(opts){
 
 };
 
+// can user role_id perform action role on doc rel_id given membership
+// of group id -- same semantics as find with role_id.
+module.exports.can = function(role_id, rel_id, id, role, next){
+
+  // role is optional
+
+  if(typeof role === 'function'){
+    next = role;
+    role = false;
+  }
+
+  if(role && !_.isArray(role)){
+    role = [role];
+  }
+
+  var sql;
+  var args = [];
+  var conds = [];
+  var ix = 1;
+  var cx;
+
+  if(!id || !validate.uuid(id)){
+    return next(new Error('invalid id'));
+  }
+
+  if(!rel_id || !validate.uuid(rel_id)){
+    return next(new Error('invalid rel_id'));
+  }
+
+  if(!role_id || !validate.uuid(role_id)){
+    return next(new Error('invalid role_id'));
+  }
+
+  sql = "";
+  sql += "SELECT COUNT(*) FROM obj u";
+  sql += " INNER JOIN rel g ";
+  sql += "  ON g.rel_id = u.id ";
+  sql += "  AND g.id = $" + ix;
+  args.push(id);
+  ix ++;
+
+  // if role or [role, role, ...]
+  if(role){
+    cx = [];
+    _.each(role, function(x){
+      cx.push(ix);
+      ix ++;
+      args.push(x);
+    });
+    sql += " AND g.role IN($" + cx.join(', $') + ")";
+  }
+
+  sql += " INNER JOIN rel r ";
+  sql += "  ON r.id = g.id ";
+  sql += "  AND r.rel_id = $" + ix;
+  args.push(rel_id);
+  ix ++;
+
+  sql += " WHERE u.id=$" + ix;
+  args.push(role_id);
+  ix ++;
+
+  db.queryOne(
+    sql,
+    args,
+    function(err, res){
+      var can = (Number(res.count) === 1);
+      next(err, can);
+    });
+
+};
 
 /**
 * find a set of objects
@@ -195,11 +266,6 @@ module.exports.find = function(opts, next) {
     role_sql += " WHERE id=$" + ix;
     args.push(opts.id);
     ix ++;
-
-    role_sql += " AND rel_id=$" + ix;
-    args.push(opts.role_id);
-    ix ++;
-
     role_sql += " AND rel_id=$" + ix;
     args.push(opts.role_id);
     ix ++;
