@@ -48,27 +48,75 @@ var os = requre('objectstore');
 
 ### add
 
-```
+```javascript
 var obj = {
   slug: 'my-slug',
   attrs: {}
 }
 
-add(obj, done)
+add(obj, next)
 
-add(obj, rel, done)
+add(obj, rel, next)
 
-add(obj, rels, done)
+add(obj, rels, next)
 ```
 
 ### set
+
+```javascript
+set(id, attrs, next)
 
 ### get
 
 ### find
 
+```javascript
+find(opts, next)
+```
+
+Find objects by their type and relationships
+
+`type`
+type of objects to find
+
+`id`
+id of object they are related to
+
+`role`
+role they are related with. Either a string literal or array of
+strings. the relationship must be one of the elements of the array
+
+`role_id`
+object role_id must have a relationship (if role is
+set, the relationship must be of the given role) with id. If that
+relationship exists, then objects of type that are related to id
+(irrespective of role) are found.
+
+Find is limited to a maximum of 100 returned items
+
+`base` and `limit` parameters can be used in conjunction with `#count` to
+effect paging.
+
+### count
+
+Returns number of objects found using same query parameters as find.
+
 ### rel
 
+```javascript
+rel(id, rel_id [, opts], next)
+```
+Creates a relationship between two objects
+
+opts and all it's parameters are optional
+
+```json
+{
+  role: 'some-role',
+  position: <integer>,
+  expires: <date>
+}
+```
 
 ## Rest API
 
@@ -126,14 +174,5 @@ find item by slug
 
 create some items
 find items
-
-
-
-
-
-
-
-
-
 
 
