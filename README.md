@@ -47,6 +47,8 @@ var os = requre('objectstore');
 
 ## API
 
+All methods take a callback that is called with err and result. The
+signatures below use `next` to identify the callback.
 
 ### add
 
@@ -67,6 +69,9 @@ add(obj, rel, next)
 
 add(obj, rels, next)
 ```
+
+Callback returns the new object in it's result. The `id` field will be
+added
 
 ### set
 
@@ -156,6 +161,21 @@ to effect paging.
 
 Returns number of objects found using same query parameters as find.
 
+### can
+
+Can user object `role_id` perform action `role` on doc object `rel_id`
+given membership of group object_id.
+
+Can has the same semantics as `find` when with `role_id`, but is used to
+check for permissions on a singly object.
+
+`role` is optional.
+
+```javascript
+can (role_id, rel_id, id, role, next)
+```
+
+Callback returns true or false
 
 
 ## Rest API
