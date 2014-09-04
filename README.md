@@ -79,6 +79,23 @@ set(id, attrs, next)
 set(id, 'slug', '<new-slug-value>', next)
 ```
 
+### rel
+
+Creates a relationship between two objects
+
+```javascript
+rel(id, rel_id [, opts], next)
+```
+opts and all it's parameters are optional
+
+```json
+{
+  role: 'some-role',
+  position: <integer>,
+  expires: <date>
+}
+```
+
 ### get
 
 Retrieve a single object
@@ -103,6 +120,7 @@ get(opts, next)
 
 If there is more than one object that matches, one will be returned at
 random.
+
 
 ### find
 
@@ -138,22 +156,7 @@ to effect paging.
 
 Returns number of objects found using same query parameters as find.
 
-### rel
 
-```javascript
-rel(id, rel_id [, opts], next)
-```
-Creates a relationship between two objects
-
-opts and all it's parameters are optional
-
-```json
-{
-  role: 'some-role',
-  position: <integer>,
-  expires: <date>
-}
-```
 
 ## Rest API
 
