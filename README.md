@@ -21,8 +21,10 @@ You can create relationships between objects. The relationships have an optional
 Some uses of relationships are
 
 * parent-child, i.e a collection (use position for ordering)
-* access control (use role for type of access)
 * group membership with expiration
+* control access to individual objects in a collection (use role for type of access)
+* control access to objects based on relationship with another node (groups)
+* confirm/deny a user has access to an object
 
 You can find objects based on their type, relationships, and other parameters.
 
@@ -54,6 +56,11 @@ var obj = {
   attrs: {}
 }
 
+There is no enforcement of unique slugs. You should check a slug is
+available before using it. Typically you will use a slug in
+conjunction with a parent-child relationship, to allow you to find an
+object by name instead of id.
+
 add(obj, next)
 
 add(obj, rel, next)
@@ -63,12 +70,43 @@ add(obj, rels, next)
 
 ### set
 
+Normally used to set the attrs of an object. Can also be used to
+change the slug of an object.
+
 ```javascript
 set(id, attrs, next)
 
+set(id, 'slug', '<new-slug-value>', next)
+```
+
 ### get
 
+Retrieve a single object
+
+Get an object by id
+
+```javascript
+get(id, next)
+
+Get an object by type, slug and parent.
+
+```javascript
+get(opts, next)
+
+// opts are like
+{
+  id: '', // id of parent in relationship
+  type: '', // type of object to look for
+  slug: '', // slug to look for
+}
+```
+
+If there is more than one object that matches, one will be returned at
+random.
+
 ### find
+
+Retrieve a set of objects
 
 ```javascript
 find(opts, next)
@@ -82,20 +120,19 @@ type of objects to find
 `id`
 id of object they are related to
 
-`role`
-role they are related with. Either a string literal or array of
+`role` role they are related with. Either a string literal or array of
 strings. the relationship must be one of the elements of the array
 
-`role_id`
-object role_id must have a relationship (if role is
-set, the relationship must be of the given role) with id. If that
-relationship exists, then objects of type that are related to id
-(irrespective of role) are found.
+`role_id` object role_id must have a relationship (if role is set, the
+relationship must be of the given role) with id.
+
+If that relationship exists, then objects of type that are related to
+id (irrespective of role) are found.
 
 Find is limited to a maximum of 100 returned items
 
-`base` and `limit` parameters can be used in conjunction with `#count` to
-effect paging.
+`base` and `limit` parameters can be used in conjunction with `#count`
+to effect paging.
 
 ### count
 
