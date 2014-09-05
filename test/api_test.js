@@ -2,7 +2,9 @@
 
 var async = require('async');
 
-var api = require('../api');
+var os = require('../lib');
+var config = require( '../config');
+var api = os.Api(config);
 
 var fooUuid = '00000000-0000-0000-0000-000000000000';
 

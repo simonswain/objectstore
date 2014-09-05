@@ -1,5 +1,7 @@
-var config = require( '../config');
-var server = require('./api/server')(config);
+var os = require('./lib');
+var config = require( './config');
+var server = os.Server(config);
+
 server.start();
 
 process.on( 'SIGINT', function() {

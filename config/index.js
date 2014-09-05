@@ -12,24 +12,25 @@ var pg = {
 
 switch ( env ) {
 case 'test' :
-  exports.port = 3003;
+  exports.host = 'localhost';
+  exports.port = 8003;
   pg.database = nickname + '_test';
   break;
 
 case 'dev' :
-  exports.port = 3002;
+  exports.host = 'localhost';
+  exports.port = 8002;
   pg.database = nickname + '_dev';
   break;
 
 case 'live' :
-  exports.listen = '/tmp/' + nickname + '.sock';
+  exports.host = 'localhost';
+  exports.port = 800;
   pg.database = nickname + '_live';
   break;
 }
 
 var db = {
-  poolMin: 2,
-  poolMax: 2,
   url: 'postgres://' + pg.username + ':' + pg.password + '@' + pg.host + '/' + pg.database
 };
 

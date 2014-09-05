@@ -6,4 +6,4 @@
  * Licensed under the MIT license.
  */
 
-module.exports = require('./api');
+module.exports = require('./lib');

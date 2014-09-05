@@ -3,7 +3,9 @@
 var async = require('async');
 var _ = require('underscore');
 
-var api = require('../api');
+var os = require('../lib');
+var config = require( '../config');
+var api = os.Api(config);
 
 var myUser, myAdmin, myGroup, myDoc, myIndex;
 

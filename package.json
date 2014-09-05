@@ -25,6 +25,7 @@
     "async": "^0.9.0",
     "grunt": "^0.4.5",
     "hapi": "^6.7.1",
+    "nodeunit-httpclient": "^0.2.1",
     "pg": "^3.4.1",
     "statter": "0.0.2",
     "underscore": "^1.7.0",
