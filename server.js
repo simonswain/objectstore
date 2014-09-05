@@ -1,12 +1,15 @@
 var os = require('./lib');
+var logger = require( './lib/logger');
 var config = require( './config');
 var server = os.Server(config);
 
-server.start();
+server.start(function(){
+  logger.log( 'info','Objectstore running on ' + config.host + ':' + config.port );
+});
 
 process.on( 'SIGINT', function() {
-  console.log( 'info','Shutting Down...' );
+  logger.log( 'info','Shutting Down...' );
   server.stop(function(){
-    console.log( 'info','Finished.' );
+    logger.log( 'info','Finished.' );
   });
 });
