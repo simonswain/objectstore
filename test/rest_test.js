@@ -15,7 +15,7 @@ var client = require('nodeunit-httpclient').create({
   status: 200
 });
 
-var myObj
+var myObj;
 
 exports.rest = {
 
