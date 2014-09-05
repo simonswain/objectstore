@@ -123,6 +123,8 @@ emacs config/index.js
 # initialise the database
 grunt reset
 node server
+
+info: Objectstore running on localhost:8002
 ```
 
 ## API
@@ -263,13 +265,55 @@ Callback returns true or false
 
 ## Rest API
 
+```
+GET /
 
-query
+{"objectstore":"0.0.1"}
+```
 
+
+
+```
+GET /stats
+
+{"objects":"0","relations":"0"}
+```
+
+```
+POST /reset
+
+HTTP/1.1 200 OK
+```
+
+
+### Create an Object
+
+```
+POST /objects
+{"type": "doc"}
+
+
+HTTP/1.1 200 OK
+```
+
+```
+curl -i -X POST -H "Content-type: application/json" localhost:8002/objects -d '{"type": "doc"}'
+```
+
+Returns count of number matching the query, and array containing a
+page of objects.
+
+```javascript
 {
- count:x
+ count: n
  objects: [x, x, x]
 }
+```
+
+Default page is 100 objects starting at object zero. Use `base` and
+`limit` to get different pages.
+
+
 
 
 find :id :type (find types related to id) [:role]
