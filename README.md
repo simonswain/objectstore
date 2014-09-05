@@ -75,9 +75,12 @@ url fragment)
 npm install objectstore
 ```
 
+See `config/index.sample.js` for an example of how the config object
+should look.
+
 ```javascript
-var os = require('objectstore');
-// now user Objectstore in your app
+var os = require('objectstore').api(config);
+os.add({type:'doc'}, next);
 ```
 
 ### Simple server
@@ -88,7 +91,7 @@ grunt reset
 ```
 
 ```javascript
-var server = require('objectstore').server({ ... config ... });
+var server = require('objectstore').server(config);
 server.start(next);
 ```
 
