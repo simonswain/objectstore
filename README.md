@@ -71,21 +71,23 @@ url fragment)
 
 ### Node Module
 
-```
+```bash
 npm install objectstore
 ```
 
-```
+```javascript
 var os = require('objectstore');
+// now user Objectstore in your app
 ```
 
 ### Simple server
 
 ```bash
 npm install objectstore
+grunt reset
 ```
 
-```
+```javascript
 var server = require('objectstore').server({ ... config ... });
 server.start(next);
 ```
@@ -114,11 +116,14 @@ git clone git@github.com:simonswain/objectstore.git
 cd objectstore
 npm install
 cp config/index.sample.js config/index.js
+
 # set database credentials
 emacs config/index.js
+
+# initialise the database
+grunt reset
 node server
 ```
-
 
 ## API
 
