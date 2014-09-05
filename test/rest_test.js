@@ -6,8 +6,8 @@ var async = require('async');
 var config = require( '../config');
 
 var os = require('../lib');
-var api = os.Api(config);
-var server = os.Server(config);
+var api = os.api(config);
+var server = os.server(config);
 
 var client = require('nodeunit-httpclient').create({
   port: config.port,

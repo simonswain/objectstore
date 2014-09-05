@@ -5,7 +5,7 @@ var _ = require('underscore');
 
 var os = require('../lib');
 var config = require( '../config');
-var api = os.Api(config);
+var api = os.api(config);
 
 var myUser, myAdmin, myGroup, myDoc, myIndex;
 
