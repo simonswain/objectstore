@@ -303,13 +303,36 @@ HTTP/1.1 200 OK
 curl -i -X POST -H "Content-type: application/json" localhost:8002/objects -d '{"type": "doc"}'
 ```
 
+```
+HTTP/1.1 200 OK
+
+{"type":"doc","id":"1eeaba49-4a74-4ea6-a98a-a6411fabe7ac"}
+```
+
+
+### Find Objects
+
+```
+GET /objects?type=some-type ...
+
+HTTP/1.1 200 OK
+```
+
 Returns count of number matching the query, and array containing a
 page of objects.
 
-```javascript
+The query parameters are the same as the javascript api method.
+
+```
+curl -i -X GET -H "Content-type: application/json" localhost:8002/objects?type=doc
+```
+
+```
+HTTP/1.1 200 OK
+
 {
- count: n
- objects: [x, x, x]
+ count: 1
+ objects: [{"type":"doc","id":"1eeaba49-4a74-4ea6-a98a-a6411fabe7ac"}]
 }
 ```
 
@@ -317,26 +340,29 @@ Default page is 100 objects starting at object zero. Use `base` and
 `limit` to get different pages.
 
 
+### Get an Object
+
+```
+GET /objects?type=some-type ...
+```
+
+Returns count of number matching the query, and array containing a
+page of objects.
+
+The query parameters are the same as the javascript api method.
+
+```
+curl -i -X GET -H "Content-type: application/json" localhost:8002/objects/1eeaba49-4a74-4ea6-a98a-a6411fabe7ac
+```
+
+```
+HTTP/1.1 200 OK
+
+{"type":"doc","id":"1eeaba49-4a74-4ea6-a98a-a6411fabe7ac"}
+```
 
 
-find :id :type (find types related to id) [:role]
-
-get :id
-
-set (no id = create, obj returned)
-set :id (obj returned)
-
-del :id
-
-
-
-
-rel :id :rel_id [:role :position: :expires]
-
-relate two objects
-
-
-## Some use-cases
+## Some usage examples
 
 Users and groups
 
