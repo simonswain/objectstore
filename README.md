@@ -1,5 +1,9 @@
 # Objectstore
 
+Version: 0.0.0 alpha
+
+[![Build Status](https://travis-ci.org/simonswain/objectstore.png)](https://travis-ci.org/simonswain/objectstore)
+
 Objectstore is a database for storing Objects that can be related to
 each other.
 
