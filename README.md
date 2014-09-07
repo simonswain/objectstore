@@ -376,3 +376,13 @@ Users and groups
 * give user role in group
 * find all users with role
 
+
+## Release History
+
+* 07/09/2014 0.0.0 Pre-alpha
+
+## License
+
+Copyright (c) 2014 Simon Swain
+
+Licensed under the MIT license.
