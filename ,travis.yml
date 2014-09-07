@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+  - 0.10
+addons:
+  postgresql: "9.3"
+before_script:
+  - npm install -g grunt-cli
+  - psql -c 'create database os_test;' -U postgres
+  - psql -d os_test -c 'CREATE EXTENSION "uuid-ossp";'
+  - cp config/index.travis.js config/index.js
