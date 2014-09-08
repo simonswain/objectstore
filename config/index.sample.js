@@ -1,35 +1,35 @@
-var env = process.env.NODE_ENV || 'dev';
+var env = process.env.NODE_ENV || 'development';
 
 var nickname = 'os';
 
 var pg = {
-  host:'localhost', 
+  host:'localhost',
   port: 5432,
-  username: 'os', //nickname, 
-  password: 'os', 
+  username: 'os',
+  password: 'os',
   database: ''
 };
 
+exports.host = 'localhost';
+
 switch ( env ) {
 case 'test' :
-  exports.port = 3003;
+  exports.port = 8003;
   pg.database = nickname + '_test';
   break;
 
-case 'dev' :
-  exports.port = 3002;
+case 'development' :
+  exports.port = 8002;
   pg.database = nickname + '_dev';
   break;
 
-case 'live' :
-  exports.listen = '/tmp/' + nickname + '.sock';
+case 'production' :
+  exports.port = 8001;
   pg.database = nickname + '_live';
   break;
 }
 
 var db = {
-  poolMin: 2,
-  poolMax: 2,
   url: 'postgres://' + pg.username + ':' + pg.password + '@' + pg.host + '/' + pg.database
 };
 
