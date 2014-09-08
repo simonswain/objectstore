@@ -14,9 +14,8 @@ module.exports = function(grunt) {
       files: ['Gruntfile.js',
               'db/**/*.js',
               'lib/**/*.js',
-              'api/**/*.js',
               'test/**/*.js',
-              'rest.js'
+              'server.js'
              ],
       options: {
         curly: true,
