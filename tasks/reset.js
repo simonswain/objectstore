@@ -3,7 +3,8 @@
 module.exports = function(grunt) {
   grunt.registerTask('reset', 'Resets database to pristine state', function() {
     var done = this.async();
-    var api = require('../api');
+    var config = require('../config');
+    var api = require('../lib').api(config);
     api.reset(done);
   });
 };
