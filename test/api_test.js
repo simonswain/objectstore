@@ -72,6 +72,18 @@ exports.objects = {
         test.done();
       });
   },
+  'get-type': function(test) {
+    test.expect(3);
+    api.get(
+      myObj.id,
+      myObj.type,
+      function(err, res) {
+        test.equal(err, null);
+        test.equal(res.id, myObj.id);
+        test.deepEqual(res.attrs, myObj.attrs);
+        test.done();
+      });
+  },
   'set': function(test) {
     test.expect(2);
     var attrs = {

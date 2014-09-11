@@ -199,6 +199,12 @@ Get an object by id
 get(id, next)
 ```
 
+Get an object by id, ensuring it's a specific type
+
+```javascript
+get(id, type, next)
+```
+
 Get an object by type, slug and parent.
 
 ```javascript
