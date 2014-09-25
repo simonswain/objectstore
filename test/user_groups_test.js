@@ -3,8 +3,9 @@
 var async = require('async');
 var _ = require('underscore');
 
+var config = require( '../config')(process.env.NODE_ENV);
+
 var os = require('../lib');
-var config = require( '../config');
 var api = os.api(config);
 
 var myUser, myAdmin, myGroup, myDoc, myIndex;

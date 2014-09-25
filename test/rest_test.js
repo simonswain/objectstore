@@ -3,14 +3,15 @@
 var _ = require('underscore');
 var async = require('async');
 
-var config = require( '../config');
+var config = require( '../config')(process.env.NODE_ENV);
 
 var os = require('../lib');
 var api = os.api(config);
 var server = os.server(config);
 
 var client = require('nodeunit-httpclient').create({
-  port: config.port,
+  host: config.server.host,
+  port: config.server.port,
   path: '/',
   status: 200
 });

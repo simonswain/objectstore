@@ -2,8 +2,9 @@
 
 var async = require('async');
 
+var config = require( '../config')(process.env.NODE_ENV);
+
 var os = require('../lib');
-var config = require( '../config');
 var api = os.api(config);
 
 var fooUuid = '00000000-0000-0000-0000-000000000000';
