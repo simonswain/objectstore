@@ -24,7 +24,7 @@ Objectstore has Objects and Relationships.
 
 The schema looks something like this:
 
-```
+```sql
 obj (
   id uuid,
   type varchar(16),
@@ -35,6 +35,7 @@ obj (
 rel (
   id uuid,
   rel_id uuid,
+  type default null,
   role varchar(8)
 );
 ```
@@ -381,6 +382,11 @@ Users and groups
 * add user to group
 * give user role in group
 * find all users with role
+* create a folder and give group a role
+* add a file to folder
+* find which groups can access file based on it's folder
+* find if a user can access a file, and with what role
+
 
 
 ## Release History

@@ -11,6 +11,7 @@ CREATE TABLE obj (
 CREATE TABLE rel (
        id uuid,
        rel_id uuid,
+       type varchar(16) default null,
        role varchar(8) default null,
        expires timestamp default null,
        position integer default null       
