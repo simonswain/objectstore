@@ -16,7 +16,7 @@ REST server. Methods are exposed to allow you to control the server
 programatically, and a script is provided to get it running it out of
 the box.
 
-Objectstore uses Postgresql as it's backing database.
+Objectstore uses Postgresql as it's backend.
 
 ## Concept
 
@@ -190,6 +190,22 @@ opts and all it's parameters are optional
 }
 ```
 
+### children
+
+Retrieve related (rel_id) objects of a given node by their type
+
+```javascript
+children(id, type, next)
+```
+
+### parent
+
+Retrieve parent (id) objects of a given node by the parent type
+
+```javascript
+parent(id, type, next)
+```
+
 ### get
 
 Retrieve a single object
@@ -223,7 +239,8 @@ opts are like
 ```
 
 If there is more than one object that matches, one will be returned at
-random.
+random, so you probably don't want to use this method if that is
+possible. You'll need to ensure you're creating unique entries.
 
 
 ### find
@@ -236,11 +253,16 @@ find(opts, next)
 
 Find objects by their type and relationships
 
+Find can traverse a list of types (provide them colon separated)
+
 `type`
 type of objects to find
 
+can be `<type>`, `<rel_type:type:rel_type>`
+
 `id`
-id of object they are related to
+id of the leftmost object in the type list. The right most objects
+will be the ones found
 
 `role` role they are related with. Either a string literal or array of
 strings. the relationship must be one of the elements of the array
@@ -255,6 +277,13 @@ Find is limited to a maximum of 100 returned items
 
 `base` and `limit` parameters can be used in conjunction with `#count`
 to effect paging.
+
+You would use Find to create user-group type setups, where the `id` is
+the node_id of the group. Using a find would return the list of users.
+
+
+
+
 
 ### count
 
