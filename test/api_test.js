@@ -20,6 +20,7 @@ exports.objects = {
       test.done();
     });
   },
+
   'find-none': function(test) {
     test.expect(2);
     api.find(
@@ -30,6 +31,7 @@ exports.objects = {
         test.done();
       });
   },
+
   'get-not-found': function(test) {
     test.expect(2);
     api.get(
@@ -40,6 +42,7 @@ exports.objects = {
         test.done();
       });
     },
+
   'add': function(test){
     test.expect(4);
 
@@ -62,6 +65,7 @@ exports.objects = {
         test.done();
       });
   },
+
   'get': function(test) {
     test.expect(3);
     api.get(
@@ -73,6 +77,7 @@ exports.objects = {
         test.done();
       });
   },
+
   'get-type': function(test) {
     test.expect(3);
     api.get(
@@ -85,6 +90,7 @@ exports.objects = {
         test.done();
       });
   },
+
   'set': function(test) {
     test.expect(2);
     var attrs = {
@@ -103,6 +109,7 @@ exports.objects = {
           });
       });
   },
+
   'set-slug': function(test) {
     test.expect(2);
     api.set(
@@ -119,6 +126,7 @@ exports.objects = {
           });
       });
   },
+
   'delete': function(test) {
     test.expect(2);
     api.del(
@@ -133,6 +141,7 @@ exports.objects = {
           });
       });
   },
+
   'add-parent': function(test){
     myObj = {
       type: 'parent',
@@ -146,6 +155,7 @@ exports.objects = {
         test.done();
       });
   },
+
   // add two objs
   'add-child': function(test){
     myRel = {
@@ -159,6 +169,7 @@ exports.objects = {
         test.done();
       });
   },
+
   'add-other-child': function(test){
     otherRel = {
       type: 'child',
@@ -171,6 +182,7 @@ exports.objects = {
         test.done();
       });
   },
+
   //find objs by type
   'find-type': function(test){
     test.expect(1);
@@ -181,6 +193,7 @@ exports.objects = {
       test.done();
     });
   },
+
   'count-type': function(test){
     test.expect(1);
     api.count({
@@ -190,6 +203,7 @@ exports.objects = {
       test.done();
     });
   },
+
   // relate child to parent and find
   'rel': function(test){
     api.rel(
@@ -198,6 +212,7 @@ exports.objects = {
         test.done();
       });
   },
+
   'find-rel': function(test){
     test.expect(2);
     api.find({
@@ -209,6 +224,7 @@ exports.objects = {
       test.done();
     });
   },
+
   'count-rel': function(test){
     test.expect(1);
     api.count({
@@ -219,6 +235,7 @@ exports.objects = {
       test.done();
     });
   },
+
   // find named slug in parent-child rel
   'get-rel': function(test){
     test.expect(2);
@@ -231,6 +248,7 @@ exports.objects = {
       test.done();
     });
   },
+
   // find named slug not in parent-child rel (should get nothing)
   'get-rel-none': function(test){
     test.expect(1);
@@ -242,6 +260,7 @@ exports.objects = {
       test.done();
     });
   },
+
   // find named slug of type in parent-child rel
   'get-rel-type': function(test){
     test.expect(2);
@@ -255,6 +274,7 @@ exports.objects = {
       test.done();
     });
   },
+
   // should find nothing
   'get-rel-type-none': function(test){
     test.expect(1);
@@ -267,6 +287,7 @@ exports.objects = {
       test.done();
     });
   },
+
   // relate other to parent with role and find
   'other-rel': function(test){
     api.rel(
@@ -276,6 +297,7 @@ exports.objects = {
         test.done();
       });
   },
+
   'find-role': function(test){
     test.expect(2);
     api.find({
