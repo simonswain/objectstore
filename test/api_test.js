@@ -287,6 +287,39 @@ exports.objects = {
       test.equal(res[0].id, otherRel.id);
       test.done();
     });
+  },
+
+  //find objs by type
+  'children': function(test){
+    test.expect(1);
+    api.children(
+      myObj.id,
+      'child',
+      function(err, res){
+        test.equal(res.length, 2);
+        test.done();
+      });
+  },
+
+  //find objs by type
+  'parent': function(test){
+    test.expect(1);
+    api.parent(
+      myRel.id,
+      'parent',
+      function(err, res){
+        test.equal(res.id, myObj.id);
+        test.done();
+      });
+  },
+
+  //find objs by type
+  'quit': function(test){
+    api.quit(
+      function(err, res){
+        test.done();
+      });
   }
+
 
 };
