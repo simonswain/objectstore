@@ -9,10 +9,7 @@ var api = os.api(config);
 
 var fooUuid = '00000000-0000-0000-0000-000000000000';
 
-var myObj = {
-};
-
-var myRel, otherRel;
+var myObj, myChild, myOtherChild;
 
 exports.objects = {
   'reset': function(test) {
@@ -158,27 +155,27 @@ exports.objects = {
 
   // add two objs
   'add-child': function(test){
-    myRel = {
+    myChild = {
       type: 'child',
       slug: 'child'
     };
     api.add(
-      myRel,
+      myChild,
       function(err, res){
-        myRel.id = res.id;
+        myChild.id = res.id;
         test.done();
       });
   },
 
   'add-other-child': function(test){
-    otherRel = {
+    myOtherChild = {
       type: 'child',
       slug: 'other'
     };
     api.add(
-      otherRel,
+      myOtherChild,
       function(err, res){
-        otherRel.id = res.id;
+        myOtherChild.id = res.id;
         test.done();
       });
   },
@@ -207,7 +204,7 @@ exports.objects = {
   // relate child to parent and find
   'rel': function(test){
     api.rel(
-      myObj.id, myRel.id,
+      myObj.id, myChild.id,
       function(err, res){
         test.done();
       });
@@ -220,7 +217,7 @@ exports.objects = {
       type: 'child'
     }, function(err, res){
       test.equal(res.length, 1);
-      test.equal(res[0].id, myRel.id);
+      test.equal(res[0].id, myChild.id);
       test.done();
     });
   },
@@ -243,7 +240,7 @@ exports.objects = {
       id: myObj.id,
       slug: 'child'
     }, function(err, res){
-      test.equal(res.id, myRel.id);
+      test.equal(res.id, myChild.id);
       test.equal(res.slug, 'child');
       test.done();
     });
@@ -269,7 +266,7 @@ exports.objects = {
       slug: 'child',
       type: 'child'
     }, function(err, res){
-      test.equal(res.id, myRel.id);
+      test.equal(res.id, myChild.id);
       test.equal(res.slug, 'child');
       test.done();
     });
@@ -291,7 +288,7 @@ exports.objects = {
   // relate other to parent with role and find
   'other-rel': function(test){
     api.rel(
-      myObj.id, otherRel.id, {
+      myObj.id, myOtherChild.id, {
         role: 'family'
       }, function(err, res){
         test.done();
@@ -306,7 +303,7 @@ exports.objects = {
       role: ['family','friends']
     }, function(err, res){
       test.equal(res.length, 1);
-      test.equal(res[0].id, otherRel.id);
+      test.equal(res[0].id, myOtherChild.id);
       test.done();
     });
   },
@@ -327,7 +324,7 @@ exports.objects = {
   'parent': function(test){
     test.expect(1);
     api.parent(
-      myRel.id,
+      myChild.id,
       'parent',
       function(err, res){
         test.equal(res.id, myObj.id);
