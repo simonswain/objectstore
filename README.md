@@ -1,6 +1,6 @@
 # Objectstore
 
-Version: 0.0.0 alpha
+Version: 0.0.1 Initial Release
 
 [![Build Status](https://travis-ci.org/simonswain/objectstore.png)](https://travis-ci.org/simonswain/objectstore)
 
@@ -10,6 +10,14 @@ each other.
 It is designed to be a low-friction backing store for web apps that
 need to implement structure and access control on collections of
 objects.
+
+You use Object store to hold all items (users, groups, documents,
+whatever) your app needs.
+
+Each item has a JSON blob for it's data.
+
+You create relationships to structure connections between items, e.g.
+join users in to a group, collect documents in to a folder.
 
 Use Objectstore either as a library in your own app, or run it as a
 REST server. Methods are exposed to allow you to control the server
@@ -228,61 +236,81 @@ Get an object by type, slug and parent.
 get(opts, next)
 ```
 
-opts are like
+opts are like:
 
 ```
 {
   id: '', // id of parent in relationship
   type: '', // type of object to look for
-  slug: '', // slug to look for
+  slug: '' // slug to look for
 }
 ```
 
-If there is more than one object that matches, one will be returned at
-random, so you probably don't want to use this method if that is
-possible. You'll need to ensure you're creating unique entries.
+If there is more than one object that matches (e.g. by slug) one will
+be returned at random, so you probably don't want to use this method
+if that is possible. You'll need to ensure you're creating unique
+entries.
 
 
 ### find
 
-Retrieve a set of objects
+Retrieve a set of objects, based on their types and relationships.
 
 ```javascript
 find(opts, next)
 ```
 
-Find objects by their type and relationships
-
-Find can traverse a list of types (provide them colon separated)
+Find can traverse a list of types (provide them colon separated),
+using relationships to find a list of objects related by a join object
 
 `type`
 type of objects to find
 
-can be `<type>`, `<rel_type:type:rel_type>`
+can be `<type>`, `<type:rel_type>`, `<rel_type:type:rel_type>`, and
+reverses of those.
+
+e.g.
+`user` // all users
+`doc` // all docs
+`group` // all groups
+
+`doc:image` // all images in a doc (id to rel_id -- parent-child)
+`group:user` // all users in a group (id to rel_id -- multiparent-child)
+`!user:group` // groups a user is in (rel_id to id -- parents by type)
+
+`user:group:doc` // all docs a user can access (because the docs have
+been shared to the group by a rel)
+
+`!doc:group:user` // all users that can access a doc (by the doc's
+relationship to the group, and user's relationship to the group)
 
 `id`
 id of the leftmost object in the type list. The right most objects
-will be the ones found
+will be the ones found.
 
-`role` role they are related with. Either a string literal or array of
-strings. the relationship must be one of the elements of the array
-
-`role_id` object role_id must have a relationship (if role is set, the
-relationship must be of the given role) with id.
-
-If that relationship exists, then objects of type that are related to
-id (irrespective of role) are found.
-
-Find is limited to a maximum of 100 returned items
+Find is limited to a maximum of 100 returned items. Use base and limit
+to page through the entire found set,
 
 `base` and `limit` parameters can be used in conjunction with `#count`
 to effect paging.
 
-You would use Find to create user-group type setups, where the `id` is
-the node_id of the group. Using a find would return the list of users.
+The objects in the returned list of items will have a `roles` field
+added to them, containing an array of roles that were found between
+the first and second items objects in the type list. This is
+equivalent to a user's role in a group.
+
+You could reverse the types to find users whos can access a specific doc
+
+e.g. `!doc:group:user`.
+
+The `!` indicates this is reverse, and the roles will be taken from
+the middle and last objects.
 
 
+Find can also be used to find parent-child relationships and their
+roles, by specifying two types in the list.
 
+e.g `folder:doc` and `!doc:folder`
 
 
 ### count
@@ -371,7 +399,7 @@ curl -i -X GET -H "Content-type: application/json" localhost:8002/objects?type=d
 HTTP/1.1 200 OK
 
 {
- count: 1
+ count: 1,
  objects: [{"type":"doc","id":"1eeaba49-4a74-4ea6-a98a-a6411fabe7ac"}]
 }
 ```
@@ -421,6 +449,7 @@ Users and groups
 ## Release History
 
 * 07/09/2014 0.0.0 Pre-alpha
+* 07/10/2014 0.0.1 Initial release
 
 ## License
 
