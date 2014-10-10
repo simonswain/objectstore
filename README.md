@@ -148,110 +148,44 @@ info: Objectstore running on localhost:8002
 All methods take a callback that is called with err and result. The
 signatures below use `next` to identify the callback.
 
-### add
+* [`reset`](#reset)
+* [`quit`](#quit)
+* [`purge`](#purge)
+* [`stats`](#stats)
 
-```javascript
-var obj = {
-  slug: 'my-slug',
-  attrs: {}
-}
-```
-There is no enforcement of unique slugs. You should check a slug is
-available before using it. Typically you will use a slug in
-conjunction with a parent-child relationship, to allow you to find an
-object by name instead of id.
+* [`add`](#add)
+* [`get`](#get)
+* [`getById`](#getById)
+* [`getBy`](#getBy)
+* [`set`](#set)
+* [`setSlug`](#setSlug)
+* [`del`](#del)
 
-```
-add(obj, next)
-add(obj, rel, next)
-add(obj, rels, next)
-```
+* [`rel`](#rel)
+* [`unrel`](#unrel)
 
-Callback returns the new object in it's result. The `id` field will be
-added
+* [`parent`](#parent)
+* [`children`](#children)
 
-### set
+* [`find`](#find)
+* [`count`](#count)
 
-Normally used to set the attrs of an object. Can also be used to
-change the slug of an object.
-
-```javascript
-set(id, attrs, next)
-
-set(id, 'slug', '<new-slug-value>', next)
-```
-
-### rel
-
-Creates a relationship between two objects
-
-```javascript
-rel(id, rel_id [, opts], next)
-```
-opts and all it's parameters are optional
-
-```javascript
-{
-  role: 'some-role',
-  position: <integer>,
-  expires: <date>
-}
-```
-
-### children
-
-Retrieve related (rel_id) objects of a given node by their type
-
-```javascript
-children(id, type, next)
-```
-
-### parent
-
-Retrieve parent (id) objects of a given node by the parent type
-
-```javascript
-parent(id, type, next)
-```
-
-### get
-
-Retrieve a single object
-
-Get an object by id
-
-```javascript
-get(id, next)
-```
-
-Get an object by id, ensuring it's a specific type
-
-```javascript
-get(id, type, next)
-```
-
-Get an object by type, slug and parent.
-
-```javascript
-get(opts, next)
-```
-
-opts are like:
-
-```
-{
-  id: '', // id of parent in relationship
-  type: '', // type of object to look for
-  slug: '' // slug to look for
-}
-```
-
-If there is more than one object that matches (e.g. by slug) one will
-be returned at random, so you probably don't want to use this method
-if that is possible. You'll need to ensure you're creating unique
-entries.
+* [`join`](#join)
+* [`can`](#can)
 
 
+
+
+<a name="reset" />
+### reset
+
+<a name="quit" />
+### quit
+
+<a name="stats" />
+### stats
+
+<a name="find" />
 ### find
 
 Retrieve a set of objects, based on their types and relationships.
@@ -269,10 +203,25 @@ type of objects to find
 can be `<type>`, `<type:rel_type>`, `<rel_type:type:rel_type>`, and
 reverses of those.
 
+supply a type - find all of that type
+
 e.g.
 `user` // all users
 `doc` // all docs
 `group` // all groups
+
+supply a `type` and `id` - find all of that type related to `id` (with
+optional role)
+
+eg users in a group
+
+
+supply a type and `rel_id` - find all of that type reversed related to
+`rel_id` (with optional role)
+
+eg owner of a doc
+
+
 
 `doc:image` // all images in a doc (id to rel_id -- parent-child)
 `group:user` // all users in a group (id to rel_id -- multiparent-child)
@@ -312,11 +261,122 @@ roles, by specifying two types in the list.
 
 e.g `folder:doc` and `!doc:folder`
 
-
+<a name="count" />
 ### count
 
 Returns number of objects found using same query parameters as find.
 
+
+<a name="add" />
+### add
+
+```javascript
+var obj = {
+  slug: 'my-slug',
+  attrs: {}
+}
+```
+There is no enforcement of unique slugs. You should check a slug is
+available before using it. Typically you will use a slug in
+conjunction with a parent-child relationship, to allow you to find an
+object by name instead of id.
+
+```
+add(obj, next)
+add(obj, rel, next)
+add(obj, rels, next)
+```
+
+Callback returns the new object in it's result. The `id` field will be
+added
+
+<a name="set" />
+### set
+
+Normally used to set the attrs of an object. Can also be used to
+change the slug of an object.
+
+```javascript
+set(id, attrs, next)
+
+set(id, 'slug', '<new-slug-value>', next)
+```
+
+### rel
+
+Creates a relationship between two objects
+
+```javascript
+rel(id, rel_id [, opts], next)
+```
+opts and all it's parameters are optional
+
+```javascript
+{
+  role: 'some-role',
+  position: <integer>,
+  expires: <date>
+}
+```
+
+<a name="children" />
+### children
+
+Retrieve related (rel_id) objects of a given node by their type
+
+```javascript
+children(id, type, next)
+```
+
+<a name="parent" />
+### parent
+
+Retrieve parent (id) objects of a given node by the parent type
+
+```javascript
+parent(id, type, next)
+```
+
+<a name="get" />
+### get
+
+Retrieve a single object
+
+Get an object by id
+
+```javascript
+get(id, next)
+```
+
+Get an object by id, ensuring it's a specific type
+
+```javascript
+get(id, type, next)
+```
+
+Get an object by type, slug and parent.
+
+```javascript
+get(opts, next)
+```
+
+opts are like:
+
+```
+{
+  id: '', // id of parent in relationship
+  type: '', // type of object to look for
+  slug: '' // slug to look for
+}
+```
+
+If there is more than one object that matches (e.g. by slug) one will
+be returned at random, so you probably don't want to use this method
+if that is possible. You'll need to ensure you're creating unique
+entries.
+
+
+<a name="can" />
 ### can
 
 Can user object `role_id` perform action `role` on doc object `rel_id`
