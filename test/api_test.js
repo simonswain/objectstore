@@ -22,9 +22,9 @@ exports.objects = {
     test.expect(2);
     api.find(
       {},
-      function(err, objs) {
+      function(err, res) {
         test.equal(err, null);
-        test.equal(objs.length, 0);
+        test.equal(res.length, 0);
         test.done();
       });
   },
@@ -181,7 +181,7 @@ exports.objects = {
   },
 
   //find objs by type
-  'find-type': function(test){
+  'find-by-type': function(test){
     test.expect(1);
     api.find({
       type: 'child'
@@ -191,7 +191,7 @@ exports.objects = {
     });
   },
 
-  'count-type': function(test){
+  'count-by-type': function(test){
     test.expect(1);
     api.count({
       type: 'child'
@@ -210,7 +210,7 @@ exports.objects = {
       });
   },
 
-  'find-rel': function(test){
+  'find-by-type-rel': function(test){
     test.expect(2);
     api.find({
       id: myObj.id,
@@ -222,11 +222,41 @@ exports.objects = {
     });
   },
 
-  'count-rel': function(test){
+  'reverse-find-by-type-rel': function(test){
+    test.expect(2);
+    api.find({
+      rel_id: myChild.id,
+      type: 'parent'
+    }, function(err, res){
+      test.equal(res.length, 1);
+      test.equal(res[0].id, myObj.id);
+      test.done();
+    });
+  },
+
+  // finding parent of child
+  'reverse-find-one-by-type-rel': function(test){
+    test.expect(3);
+    api.find({
+      rel_id: myChild.id,
+      type: 'parent',
+    }, {
+      one: true
+    }, function(err, res){
+      test.equal(typeof res, 'object');
+      test.equal(typeof res.length, 'undefined');
+      test.equal(res.id, myObj.id);
+      test.done();
+    });
+  },
+
+  'count-by-type-rel': function(test){
     test.expect(1);
-    api.count({
+    api.find({
       id: myObj.id,
-      type: 'child'
+      type: 'child',
+    }, {
+      count: true
     }, function(err, res){
       test.equal(res, 1);
       test.done();
@@ -257,7 +287,7 @@ exports.objects = {
       test.done();
     });
   },
-
+  
   // find named slug of type in parent-child rel
   'get-rel-type': function(test){
     test.expect(2);
@@ -288,19 +318,20 @@ exports.objects = {
   // relate other to parent with role and find
   'other-rel': function(test){
     api.rel(
-      myObj.id, myOtherChild.id, {
+      myObj.id, 
+      myOtherChild.id, {
         role: 'family'
       }, function(err, res){
         test.done();
       });
   },
-
-  'find-role': function(test){
+  
+  'find-by-type-and-role': function(test){
     test.expect(2);
     api.find({
       id: myObj.id,
       type: 'child',
-      role: ['family','friends']
+      role: 'family'
     }, function(err, res){
       test.equal(res.length, 1);
       test.equal(res[0].id, myOtherChild.id);
@@ -332,7 +363,6 @@ exports.objects = {
       });
   },
 
-  //find objs by type
   'quit': function(test){
     api.quit(
       function(err, res){

@@ -172,6 +172,11 @@ exports.rest = {
       });
   },
 
+  'api-quit': function(test) {
+    api.quit(function(){
+      test.done();
+    });
+  },
 
   'server-stop': function(test) {
     server.stop(function(){
