@@ -268,23 +268,6 @@ exports.access = {
     });
   },
 
-  // // passing in multiple roles
-  // 'can-user-view-edit-doc2-yes': function(test){
-  //   test.expect(1);
-
-  //   api.can({
-  //     id: user1.id,
-  //     target_id: doc2.id,
-  //     link: 'group',
-  //     role: 'edit'
-  //   }, function(err, res){
-  //     // true if can
-  //     test.ok(res);
-  //     test.done();
-  //   });
-  // },
-
-
   'quit': function(test){
     api.quit(
       function(err, res){
