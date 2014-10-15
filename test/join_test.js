@@ -164,7 +164,7 @@ exports.access = {
       });
   },
 
-  'find-joined': function(test){
+  'find-user-1-docs': function(test){
     test.expect(1);
     api.join({
       id: user1.id,
