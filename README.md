@@ -152,7 +152,6 @@ signatures below use `next` to identify the callback.
 * [`quit`](#quit)
 * [`purge`](#purge)
 * [`stats`](#stats)
-
 * [`add`](#add)
 * [`get`](#get)
 * [`getById`](#getById)
@@ -160,21 +159,14 @@ signatures below use `next` to identify the callback.
 * [`set`](#set)
 * [`setSlug`](#setSlug)
 * [`del`](#del)
-
 * [`rel`](#rel)
 * [`unrel`](#unrel)
-
 * [`parent`](#parent)
 * [`children`](#children)
-
 * [`find`](#find)
 * [`count`](#count)
-
 * [`join`](#join)
 * [`can`](#can)
-
-
-
 
 <a name="reset" />
 ### reset
@@ -302,6 +294,7 @@ set(id, attrs, next)
 set(id, 'slug', '<new-slug-value>', next)
 ```
 
+<a name="rel" />
 ### rel
 
 Creates a relationship between two objects
@@ -374,6 +367,9 @@ If there is more than one object that matches (e.g. by slug) one will
 be returned at random, so you probably don't want to use this method
 if that is possible. You'll need to ensure you're creating unique
 entries.
+
+<a name="join" />
+### join
 
 
 <a name="can" />
