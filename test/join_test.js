@@ -92,7 +92,10 @@ exports.access = {
   'add-doc-1': function(test){
     doc1 = {
       type: 'doc',
-      slug: 'doc1'
+      slug: 'doc1',
+      attrs: {
+        title: 'alpha'
+      }
     };
     api.add(
       doc1,
@@ -105,7 +108,10 @@ exports.access = {
   'add-doc-2': function(test){
     doc2 = {
       type: 'doc',
-      slug: 'doc2'
+      slug: 'doc2',
+      attrs: {
+        title: 'bravo'
+      }
     };
     api.add(
       doc2,
@@ -118,7 +124,10 @@ exports.access = {
   'add-doc-3': function(test){
     doc3 = {
       type: 'doc',
-      slug: 'doc3'
+      slug: 'doc3',
+      attrs: {
+        title: 'charlie'
+      }
     };
     api.add(
       doc3,
@@ -264,6 +273,24 @@ exports.access = {
     }, function(err, res){
       // true if can
       test.ok(res);
+      test.done();
+    });
+  },
+
+  'find-where-user-1-docs': function(test){
+    test.expect(2);
+    api.join({
+      id: user1.id,
+      link: 'group',
+      type: 'doc',
+      where: {
+        title: 'alp'
+      },     
+    }, {
+      //debug: true
+    }, function(err, res){
+      test.equal(res.length, 1);
+      test.equal(res[0].attrs.title, 'alpha');
       test.done();
     });
   },
