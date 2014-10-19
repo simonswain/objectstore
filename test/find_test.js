@@ -22,18 +22,18 @@ exports.objects = {
     var add = function(x, next){
 
       var obj = {
-      type: 'nato',
-      slug: NATO[x%26],
-      attrs: {
-        title: NATO[x%26] + ' ' + x
-      }
-    };
+        type: 'nato',
+        slug: NATO[x%26],
+        attrs: {
+          title: NATO[x%26] + ' ' + x
+        }
+      };
 
-    api.add(
-      obj,
-      function(err, res){
-        next();
-      });
+      api.add(
+        obj,
+        function(err, res){
+          next();
+        });
     };
 
     async.timesSeries(createLimit, add, function(){
@@ -117,12 +117,29 @@ exports.objects = {
     });
   },
 
+  // where title is partial match
+
+  'where': function(test){
+    test.expect(2);
+    api.find({
+      type: 'nato',
+      where: {
+        title: 'alp'
+      },
+      sort: 'title'
+    }, {
+    }, function(err, res){
+      test.equal(res.length, 1);
+      test.equal(res[0].attrs.title, 'alpha 0');
+      test.done();
+    });
+  },
+
   'quit': function(test){
     api.quit(
       function(err, res){
         test.done();
       });
   }
-
 
 };
