@@ -264,7 +264,6 @@ exports.access = {
   // passing in multiple roles (view should provide true)
   'can-user-view-edit-doc1-yes': function(test){
     test.expect(1);
-
     api.can({
       id: user1.id,
       target_id: doc2.id,
