@@ -11,7 +11,7 @@ var NATO = [ 'alpha', 'bravo', 'charlie', 'delta', 'echo', 'foxtrot', 'golf', 'h
 
 var createLimit = 26;
 
-exports.objects = {
+exports.find = {
   'reset': function(test) {
     api.reset(function() {
       test.done();

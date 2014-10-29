@@ -9,7 +9,7 @@ var api = os.api(config);
 
 var user1, group1, group2, doc1, doc2, doc3;
 
-exports.access = {
+exports.join = {
 
   'reset': function(test) {
     api.reset(function() {
