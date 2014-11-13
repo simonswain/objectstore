@@ -1,7 +1,7 @@
 {
   "name": "objectstore",
   "description": "Object-relation database",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "homepage": "https://github.com/simonswain/objectstore",
   "author": {
     "name": "Simon Swain",
@@ -28,7 +28,7 @@
     "async": "^0.9.0",
     "grunt": "^0.4.5",
     "handlebars": "^2.0.0",
-    "hapi": "^6.9.0",
+    "hapi": "^7.5.2",
     "hapi-less": "^0.1.1",
     "nodeunit-httpclient": "^0.2.1",
     "pg": "^3.4.1",
