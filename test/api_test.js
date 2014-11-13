@@ -339,6 +339,19 @@ exports.objects = {
     });
   },
 
+  //find obj by id, parent and type
+  'child': function(test){
+    test.expect(1);
+    api.child(
+      myObj.id,
+      myChild.id,
+      'child',
+      function(err, res){
+        test.equal(res.id, myChild.id);
+        test.done();
+      });
+  },
+
   //find objs by type
   'children': function(test){
     test.expect(1);
