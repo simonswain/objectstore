@@ -162,6 +162,7 @@ signatures below use `next` to identify the callback.
 * [`rel`](#rel)
 * [`unrel`](#unrel)
 * [`parent`](#parent)
+* [`child`](#child)
 * [`children`](#children)
 * [`find`](#find)
 * [`count`](#count)
@@ -310,6 +311,15 @@ opts and all it's parameters are optional
   position: <integer>,
   expires: <date>
 }
+```
+
+<a name="child" />
+### child
+
+Retrieve single child of `id` by it's id `child_id`m ensuring it is of `type`.
+
+```javascript
+child(id, child_id type, next)
 ```
 
 <a name="children" />
