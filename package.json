@@ -1,7 +1,7 @@
 {
   "name": "objectstore",
   "description": "Object-relation database",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "homepage": "https://github.com/simonswain/objectstore",
   "author": {
     "name": "Simon Swain",
